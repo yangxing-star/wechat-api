@@ -27,7 +27,7 @@ module Wechat
         'MONEY_LIMITED' => MoneyLimitedError
       }
 
-      attr_accessor :logger
+      attr_accessor :logger, :parser
 
       def initialize(mch_id, wxappid, opts = {})
         @mch_id = mch_id
@@ -54,7 +54,7 @@ module Wechat
 
       def handle(resp)
         response = parser.parse(resp)
-        check(response)
+        # check(response)
         response
       end
 
