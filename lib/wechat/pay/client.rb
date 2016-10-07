@@ -19,7 +19,7 @@ module Wechat
     class Client
       include Redpack
       BASE_URL = 'https://api.mch.weixin.qq.com'
-      # REQUIRED_OPTS = %w(key password cert sign_key).map(&:to_sym).freeze
+      REQUIRED_OPTS = %w(key password cert sign_key).map(&:to_sym).freeze
       ERRORS = {
         'NO_AUTH' => NoAuthError,
         'NOTENOUGH' => NotEnoughError,
@@ -33,11 +33,11 @@ module Wechat
         @mch_id = mch_id
         @wxappid = wxappid
         @opts = Hash[opts.map { |k, v| [k.to_sym, v] }]
-        # unless (REQUIRED_OPTS - @opts.keys).empty?
-        #   fail format('%s required', REQUIRED_OPTS.join(','))
-        # end
+        unless (REQUIRED_OPTS - @opts.keys).empty?
+          fail format('%s required', REQUIRED_OPTS.join(','))
+        end
         @logger = Logger.new(STDOUT)
-        # rsa_setup
+        rsa_setup
         @parser = Nori.new
       end
 
@@ -78,8 +78,8 @@ module Wechat
         RestClient.log = logger
         RestClient::Resource.new\
           [BASE_URL, path].join,
-          # ssl_client_key: @rsa_key,
-          # ssl_client_cert: @rsa_cert,
+          ssl_client_key: @rsa_key,
+          ssl_client_cert: @rsa_cert,
           verify_ssl: OpenSSL::SSL::VERIFY_NONE
       end
 
